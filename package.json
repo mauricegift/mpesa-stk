@@ -1,0 +1,36 @@
+{
+  "name": "gifted-mpesa-api",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "description": "Gifted Mpesa API - A Node.js API for M-Pesa integration",
+  "main": "./lib/index.js",
+  "scripts": {
+    "start": "node lib/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": [
+    "mpesa",
+    "api",
+    "payment",
+    "kenya",
+    "mobile-money"
+  ],
+  "author": "GiftedTech",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "*",
+    "body-parser": "*",
+    "express": "*",
+    "mongoose": "*"
+  },
+  "devDependencies": {
+    "nodemon": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mauricegift/mpesa-stk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mauricegift/mpesa-stk/issues"
+  }
+}

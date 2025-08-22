@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIFTED MPESA PAY</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #006400 0%, #00a86b 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        header {
+            background: #006400;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 25px;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            color: #006400;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            border-color: #00a86b;
+            outline: none;
+        }
+        
+        button {
+            background: #006400;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            background: #008554;
+        }
+        
+        button:active {
+            transform: translateY(2px);
+        }
+        
+        .transaction-section {
+            display: none;
+        }
+        
+        .transaction-details {
+            background: #f9f9f9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background: #fff4e6;
+            color: #f90;
+        }
+        
+        .status-completed {
+            background: #e6f7ee;
+            color: #006400;
+        }
+        
+        .status-failed {
+            background: #ffe6e6;
+            color: #e00;
+        }
+        
+        .response-box {
+            background: #f0f8f4;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #006400;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .notification.success {
+            background: #00a86b;
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            background: #e00;
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 20px;
+            opacity: 0.8;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 10px;
+            }
+            
+            header h1 {
+                font-size: 24px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-money-bill-wave"></i> Gifted M-Pesa STK Push</h1>
+            <p>M-Pesa integration easened via GIFTEDTECH NEXUS</p>
+        </header>
+        
+        <div class="content">
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-paper-plane"></i> Initiate Payment</h2>
+                
+                <div class="input-group">
+                    <label for="phone">Phone Number (254...)</label>
+                    <input type="text" id="phone" placeholder="e.g., 254712345678">
+                </div>
+                
+                <div class="input-group">
+                    <label for="amount">Amount (KSH)</label>
+                    <input type="number" id="amount" placeholder="e.g., 100">
+                </div>
+                
+                <button id="initiateBtn" onclick="initiatePayment()">
+                    <i class="fas fa-paper-plane"></i> Initiate STK Push
+                </button>
+                
+                <div class="loading" id="initiateLoading">
+                    <div class="spinner"></div>
+                    <p>Initiating payment request...</p>
+                </div>
+            </div>
+            
+            <div class="transaction-section" id="transactionSection">
+                <h2 class="section-title"><i class="fas fa-receipt"></i> Transaction Details</h2>
+                
+                <div class="transaction-details">
+                    <div class="detail-row">
+                        <span>Checkout Request ID:</span>
+                        <span id="checkoutId">-</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Status:</span>
+                        <span class="status-badge status-pending" id="statusBadge">Pending</span>
+                    </div>
+                </div>
+                
+                <h2 class="section-title" style="margin-top: 30px;"><i class="fas fa-search"></i> Verify Transaction</h2>
+                
+                <div class="input-group">
+                    <label for="checkoutRequestId">Checkout Request ID</label>
+                    <input type="text" id="checkoutRequestId" placeholder="Paste Checkout Request ID here">
+                </div>
+                
+                <button id="verifyBtn" onclick="verifyTransaction()">
+                    <i class="fas fa-search"></i> Verify Transaction
+                </button>
+                
+                <div class="loading" id="verifyLoading">
+                    <div class="spinner"></div>
+                    <p>Verifying transaction status...</p>
+                </div>
+                
+                <div class="response-box" id="responseBox">
+                    Response will appear here...
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification"></div>
+    
+    <footer>
+        <p>&copy;2025 Secured by Gifted Tech</p>
+    </footer>
+
+    <script>
+        // API base URL - update this to match your backend URL
+        const API_BASE_URL = window.location.origin;
+        
+        // Store transaction details
+        let currentTransaction = {
+            checkoutRequestId: null,
+            transactionId: null
+        };
+        
+        // Show notification function
+        function showNotification(message, type) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.className = 'notification ' + type;
+            
+            setTimeout(() => {
+                notification.className = 'notification';
+            }, 3000);
+        }
+        
+        // Initiate payment function - UPDATED TO USE REAL API
+        async function initiatePayment() {
+            const phone = document.getElementById('phone').value;
+            const amount = document.getElementById('amount').value;
+            
+            if (!phone || !amount) {
+                showNotification('Please enter both phone number and amount', 'error');
+                return;
+            }
+            
+            if (!phone.startsWith('254')) {
+                showNotification('Phone number must start with 254', 'error');
+                return;
+            }
+            
+            const initiateLoading = document.getElementById('initiateLoading');
+            const initiateBtn = document.getElementById('initiateBtn');
+            
+            initiateLoading.style.display = 'block';
+            initiateBtn.disabled = true;
+            
+            try {
+                // Make API call to your backend
+                const response = await fetch(`${API_BASE_URL}/api/pay.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        phoneNumber: phone,
+                        amount: amount
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showNotification('STK Push sent successfully! Check your phone', 'success');
+                    
+                    // Update transaction details
+                    currentTransaction.checkoutRequestId = data.CheckoutRequestID;
+                    
+                    document.getElementById('checkoutId').textContent = data.CheckoutRequestID;
+                    document.getElementById('checkoutRequestId').value = data.CheckoutRequestID;
+                    
+                    // Show transaction section
+                    document.getElementById('transactionSection').style.display = 'block';
+                    
+                    // Scroll to transaction section
+                    document.getElementById('transactionSection').scrollIntoView({ behavior: 'smooth' });
+                    
+                    // Start polling for transaction status
+                    pollTransactionStatus(data.CheckoutRequestID);
+                } else {
+                    showNotification('Failed to send STK Push: ' + (data.error || 'Unknown error'), 'error');
+                    console.error('STK Push failed:', data);
+                }
+            } catch (error) {
+                console.error('Error initiating payment:', error);
+                showNotification('Error initiating payment: ' + error.message, 'error');
+            } finally {
+                initiateLoading.style.display = 'none';
+                initiateBtn.disabled = false;
+            }
+        }
+        
+        // Verify transaction function - UPDATED TO USE REAL API
+        async function verifyTransaction() {
+            const checkoutRequestId = document.getElementById('checkoutRequestId').value;
+            
+            if (!checkoutRequestId) {
+                showNotification('Please enter a Checkout Request ID', 'error');
+                return;
+            }
+            
+            const verifyLoading = document.getElementById('verifyLoading');
+            const verifyBtn = document.getElementById('verifyBtn');
+            const responseBox = document.getElementById('responseBox');
+            
+            verifyLoading.style.display = 'block';
+            verifyBtn.disabled = true;
+            
+            try {
+                // Make API call to your backend
+                const response = await fetch(`${API_BASE_URL}/api/verify-transaction.php`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        checkoutRequestId: checkoutRequestId
+                    })
+                });
+                
+                const data = await response.json();
+                
+                // Update status badge
+                const statusBadge = document.getElementById('statusBadge');
+                statusBadge.textContent = data.status.charAt(0).toUpperCase() + data.status.slice(1);
+                statusBadge.className = 'status-badge status-' + data.status;
+                
+                // Display response
+                responseBox.textContent = JSON.stringify(data, null, 2);
+                
+                if (data.success) {
+                    showNotification('Transaction verified successfully!', 'success');
+                } else if (data.status === 'pending') {
+                    showNotification('Transaction is still pending', 'error');
+                } else {
+                    showNotification('Transaction failed: ' + (data.data?.ResultDesc || 'Unknown reason'), 'error');
+                }
+            } catch (error) {
+                console.error('Error verifying transaction:', error);
+                showNotification('Error verifying transaction: ' + error.message, 'error');
+                responseBox.textContent = 'Error: ' + error.message;
+            } finally {
+                verifyLoading.style.display = 'none';
+                verifyBtn.disabled = false;
+            }
+        }
+        
+        // Poll transaction status function
+        async function pollTransactionStatus(checkoutRequestId) {
+            let attempts = 0;
+            const maxAttempts = 300; // Try for 5 minutes (30 attempts * 10 seconds)
+            
+            const pollInterval = setInterval(async () => {
+                if (attempts >= maxAttempts) {
+                    clearInterval(pollInterval);
+                    showNotification('Transaction status polling timed out', 'error');
+                    return;
+                }
+                
+                attempts++;
+                
+                try {
+                    const response = await fetch(`${API_BASE_URL}/api/verify-transaction.php`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            checkoutRequestId: checkoutRequestId
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    // Update status badge
+                    const statusBadge = document.getElementById('statusBadge');
+                    statusBadge.textContent = data.status.charAt(0).toUpperCase() + data.status.slice(1);
+                    statusBadge.className = 'status-badge status-' + data.status;
+                    
+                    // Update response box
+                    document.getElementById('responseBox').textContent = JSON.stringify(data, null, 2);
+                    
+                    // Stop polling if transaction is completed or failed
+                    if (data.status === 'completed' || data.status === 'failed') {
+                        clearInterval(pollInterval);
+                        
+                        if (data.status === 'completed') {
+                            showNotification('Payment completed successfully!', 'success');
+                        } else {
+                            showNotification('Payment failed: ' + (data.data?.ResultDesc || 'Unknown reason'), 'error');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error polling transaction status:', error);
+                }
+            }, 5000); // Poll every 1 second
+        }
+        
+        // Initialize the form with example values for testing
+        document.getElementById('phone').value = '2547xxxxxxxx';
+        document.getElementById('amount').value = '1';
+    </script>
+</body>
+</html>
