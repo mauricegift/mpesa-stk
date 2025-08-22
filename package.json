@@ -20,6 +20,7 @@
   "dependencies": {
     "axios": "*",
     "body-parser": "*",
+    "dotenv": "*",
     "express": "*",
     "mongoose": "*"
   },
