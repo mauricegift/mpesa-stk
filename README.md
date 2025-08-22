@@ -39,10 +39,7 @@
       * `CALLBACK_URL`: For handling callback data
       * `MONGO_URI`: If you plan to use it or another db
 
-   * **Crucially, update the `CALLBACK_URL` config var to use the Heroku app URL.** 
-     - The Heroku app URL will be provided by Heroku after you create the app. 
-     - It will typically be in the format `https://<my-deployed-app-url>/mpesa/callback`.
-
+     - Callback Url will typically be in the format `https://<my-deployed-app-url>/mpesa/callback`.
 
 
 ## Moving to Production
