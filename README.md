@@ -23,21 +23,21 @@
 
 **Features:**
 
-* Initiate M-Pesa STK Push payments 💸
+* Initiate M-Pesa STK Push payments 
 * Handle callback responses for transaction status ✅
-* Make stk query for transaction status
+* Make stk query for transaction status... I made this well but messed it up again just a bit but I'll fix it anyway
 
 
 **3. Configure the App:**
 
-   * Add the following to **[config.js]()** or .env file:
+   * Add the following to **[config.js](https://github.com/mauricegift/mpesa-stk/blob/main/lib/config/index.js)** or .env file:
 
       * `CONSUMER_KEY`: Your Safaricom Consumer Key
       * `CONSUMER_SECRET`: Your Safaricom Consumer Secret
       * `SHORT_CODE`: Your Safaricom ShortCode
       * `PASSKEY`: Your Safaricom Passkey
-      * `NUMBER`: The phone number to send the payment request to (for testing)
-      * `AMOUNT`: The amount to be paid (for testing)
+      * `CALLBACK_URL`: For handling callback data
+      * `MONGO_URI`: If you plan to use it or another db
 
    * **Crucially, update the `CALLBACK_URL` config var to use the Heroku app URL.** 
      - The Heroku app URL will be provided by Heroku after you create the app. 
